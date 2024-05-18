@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Time   : 2022/8/2
-# @Author : Ayush Thakur
-# @Email  : ayusht@wandb.com
-
 r"""
 recbole.utils.wandblogger
 ################################

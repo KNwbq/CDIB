@@ -1,12 +1,3 @@
-# @Time   : 2020/6/25
-# @Author : Shanlei Mu
-# @Email  : slmu@ruc.edu.cn
-
-# UPDATE:
-# @Time   : 2022/7/16, 2020/8/6, 2020/8/25, 2023/4/24
-# @Author : Zhen Tian, Shanlei Mu, Yupeng Hou, Chenglong Ma
-# @Email  : chenyuwuxinn@gmail.com, slmu@ruc.edu.cn, houyupeng@ruc.edu.cn, chenglong.m@outlook.com
-
 """
 recbole.model.abstract_recommender
 ##################################

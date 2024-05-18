@@ -1,12 +1,3 @@
-# @Time   : 2020/7/7
-# @Author : Yupeng Hou
-# @Email  : houyupeng@ruc.edu.cn
-
-# UPDATE
-# @Time   : 2022/7/8, 2020/9/18, 2020/9/21, 2020/8/31
-# @Author : Zhen Tian, Yupeng Hou, Yushuo Chen, Kaiyuan Li
-# @email  : chenyuwuxinn@gmail.com, houyupeng@ruc.edu.cn, chenyushuo@ruc.edu.cn, tsotfsk@outlook.com
-
 """
 recbole.data.dataloader.knowledge_dataloader
 ################################################

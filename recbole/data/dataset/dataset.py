@@ -1,12 +1,3 @@
-# @Time   : 2020/6/28
-# @Author : Yupeng Hou
-# @Email  : houyupeng@ruc.edu.cn
-
-# UPDATE:
-# @Time   : 2022/7/8, 2021/12/18 2021/7/14 2021/7/1, 2020/11/10
-# @Author : Zhen Tian, Yupeng Hou, Xingyu Pan, Yushuo Chen, Juyong Jiang
-# @Email  : chenyuwuxinn@gmail.com, houyupeng@ruc.edu.cn, xy_pan@foxmail.com, chenyushuo@ruc.edu.cn, csjuyongjiang@gmail.com
-
 """
 recbole.data.dataset
 ##########################

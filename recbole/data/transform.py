@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Time   : 2022/7/19
-# @Author : Gaowei Zhang
-# @Email  : zgw15630559577@163.com
 
 import math
 import numpy as np

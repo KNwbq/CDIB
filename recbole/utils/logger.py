@@ -1,18 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Time   : 2020/8/7
-# @Author : Zihan Lin
-# @Email  : linzihan.super@foxmail.com
-
-# UPDATE
-# @Time   : 2021/3/7
-# @Author : Jiawei Guan
-# @Email  : guanjw@ruc.edu.cn
-
-# UPDATE:
-# @Time   : 2022/07/10
-# @Author : Junjie Zhang
-# @Email  : zjj001128@163.com
-
 """
 recbole.utils.logger
 ###############################

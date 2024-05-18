@@ -1,12 +1,3 @@
-# @Time   : 2020/10/6, 2022/7/18
-# @Author : Shanlei Mu, Lei Wang
-# @Email  : slmu@ruc.edu.cn, zxcptss@gmail.com
-
-# UPDATE:
-# @Time   : 2022/7/8, 2022/07/10, 2022/07/13, 2023/2/11
-# @Author : Zhen Tian, Junjie Zhang, Gaowei Zhang
-# @Email  : chenyuwuxinn@gmail.com, zjj001128@163.com, zgw15630559577@163.com
-
 """
 recbole.quick_start
 ########################
