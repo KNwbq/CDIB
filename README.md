@@ -24,4 +24,4 @@ Run on  `ML-100K` with the default configuration like following:
 python run_recbole.py --model=CDIB --dataset=ml-100k --train_neg_sample_args=None
 ```
 
-You can also add your own conguration, named `CDIB.yaml`, into the `.\recbole\properties\model` folder and run the above command. The results of the experiment will be stored in the `.\log` directory. You can review the process by examining the contents of this folder.
+You can also add your own conguration, named `CDIB.yaml`, into the `.\recbole\properties\model` folder and run the above command. The results of the experiment will be stored in the `.\log` directory.
