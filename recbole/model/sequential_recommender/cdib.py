@@ -61,6 +61,7 @@ class CDIB(SequentialRecommender):
         self.dropout = nn.Dropout(self.hidden_dropout_prob)
         self.softplus = nn.Softplus()
         self.item_counter = self.init_item_count(dataset)
+        self.club = CLUB(self.hidden_size, self.hidden_size, self.hidden_size)
 
         if self.loss_type == 'BPR':
             self.loss_fct = BPRLoss()
@@ -166,10 +167,7 @@ class CDIB(SequentialRecommender):
         user_emb = self.LayerNorm5(user_emb)
         user_emb = self.dropout(user_emb)
         seq_output_ori, seq_output_aug = self.forward(item_seq, item_seq_len), self.forward(item_seq, item_seq_len, M_com)
-
-        nce_logits, nce_labels = self.info_nce(
-            seq_output_ori, seq_output_aug, temp=self.tau, batch_size=item_seq.shape[0])
-        cl_loss = self.nce_fct(nce_logits, nce_labels).mean()
+        gen_loss = self.club(seq_output_ori, seq_output_aug) + self.club.learning_loss(seq_output_ori, seq_output_aug)
 
         nce_logits_u, nce_labels_u = self.info_nce(
             user_emb, seq_output_ori, temp=self.tau, batch_size=item_seq.shape[0])
@@ -194,7 +192,7 @@ class CDIB(SequentialRecommender):
         loss_u = torch.where(torch.isfinite(loss_u), loss_u, torch.zeros_like(loss_u))
         loss_u = loss_u.mean()
         
-        return self.lmd_elbo*elbo, self.lmd_preLoss*loss_pre, self.lmd_clLoss1*cl_loss_u, -self.lmd_clLoss2*cl_loss, self.lmd_u*loss_u, rec_loss
+        return self.lmd_elbo*elbo, self.lmd_preLoss*loss_pre, self.lmd_clLoss1*cl_loss_u, self.lmd_clLoss2*gen_loss, self.lmd_u*loss_u, rec_loss
 
     @staticmethod
     def mask_correlated_samples(batch_size):
@@ -253,3 +251,47 @@ class CDIB(SequentialRecommender):
         test_items_emb = self.item_embedding.weight
         scores = torch.matmul(seq_output, test_items_emb.transpose(0, 1))  # [B n_items]
         return scores
+
+class CLUB(nn.Module):  # CLUB: Mutual Information Contrastive Learning Upper Bound
+    def __init__(self, x_dim, y_dim, hidden_size):
+        super(CLUB, self).__init__()
+        # p_mu outputs mean of q(Y|X)
+        #print("create CLUB with dim {}, {}, hiddensize {}".format(x_dim, y_dim, hidden_size))
+        self.p_mu = nn.Sequential(nn.Linear(x_dim, hidden_size//2),
+                                       nn.ReLU(),
+                                       nn.Linear(hidden_size//2, y_dim))
+        # p_logvar outputs log of variance of q(Y|X)
+        self.p_logvar = nn.Sequential(nn.Linear(x_dim, hidden_size//2),
+                                       nn.ReLU(),
+                                       nn.Linear(hidden_size//2, y_dim),
+                                       nn.Tanh())
+
+    def get_mu_logvar(self, x_samples):
+        mu = self.p_mu(x_samples)
+        logvar = self.p_logvar(x_samples)
+        return mu, logvar
+    
+    def forward(self, x_samples, y_samples):
+        # x_samples = x_samples.detach()
+        # y_samples = y_samples.detach()
+        mu, logvar = self.get_mu_logvar(x_samples)
+        
+        # log of conditional probability of positive sample pairs
+        positive = - (mu - y_samples)**2 /2./logvar.exp()  
+        
+        prediction_1 = mu.unsqueeze(1)          # shape [nsample,1,dim]
+        y_samples_1 = y_samples.unsqueeze(0)    # shape [1,nsample,dim]
+
+        # log of conditional probability of negative sample pairs
+        negative = - ((y_samples_1 - prediction_1)**2).mean(dim=1)/2./logvar.exp() 
+
+        return (positive.sum(dim = -1) - negative.sum(dim = -1)).mean()
+
+    def loglikeli(self, x_samples, y_samples): # unnormalized loglikelihood 
+        mu, logvar = self.get_mu_logvar(x_samples)
+        return (-(mu - y_samples)**2 /logvar.exp()-logvar).sum(dim=1).mean(dim=0)
+    
+    def learning_loss(self, x_samples, y_samples):
+        x_samples = x_samples.detach()
+        y_samples = y_samples.detach()
+        return - self.loglikeli(x_samples, y_samples)
