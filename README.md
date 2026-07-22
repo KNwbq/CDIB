@@ -1,4 +1,4 @@
-# Conditional Distribution Information Bottleneck for Distributionally Robust Sequential Recommendation
+# Invariant Interest Learning for Sequential Recommendation with Conditional Distribution Bottleneck
 
 This is the code for our proposed model **CDIB**. The code is built upon [RecBole](https://github.com/RUCAIBox/RecBole).
 
